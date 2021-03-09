@@ -2,6 +2,7 @@
 
 const TensorFlow = require('@tensorflow/tfjs');
 const AnimalGameRepository = use('App/Repositories/AnimalGameRepository');
+const AnimalDatasRepository = use('App/Repositories/AnimalDatasRepository');
 
 class AnimalGameController {
 
@@ -15,8 +16,19 @@ class AnimalGameController {
             resultsByDayAsc = resultsByDayAsc.toJSON();
 
             let predict = await this.operationTensorFlow(resultsByDayAsc);
+            let predictions = await this.findGroup(predict)
 
-            return response.status(200).send(predict)
+            let nextDayResult = {
+                predict: predict,
+                predictions: predictions
+            }
+
+            console.log('Regressão linear com previsão')
+            console.log('resultado: ' + predict)
+            console.log('grupo: ' + predictions.name)
+            console.log(predictions.n1 + ' ' + predictions.n2 + ' ' + predictions.n3 + ' ' + predictions.n4)
+
+            return response.status(200).send(nextDayResult)
 
         } catch (e) {
             console.log(e);
@@ -62,12 +74,18 @@ class AnimalGameController {
         const lastResult = [[6157]]
         const lastResultTensor = TensorFlow.tensor(lastResult, [1, 1]);
 
-        await model.fit(X, Y, { epochs: 500000 })
+        await model.fit(X, Y, { epochs: 200 })
 
         let response = model.predict(lastResultTensor).dataSync();
-        console.log(Number(response[0]).toFixed(0))
-        return response;
+        return Number(response[0]).toFixed(0);
 
+    }
+
+    async findGroup(thousand) {
+        let ten = thousand.toString().substr(2);
+        let animalDatasRepository = new AnimalDatasRepository();
+        let group = await animalDatasRepository.findAnimalGroup(ten);
+        return group;
     }
 
 }

@@ -10,7 +10,7 @@
 |
 */
 
-const Animalpaths = use('App/Models/AnimalPic');
+const Animalpaths = use('App/Models/AnimalDatas');
 
 /** @type {import('@adonisjs/lucid/src/Factory')} */
 const Factory = use('Factory')

@@ -4,6 +4,8 @@ const TensorFlow = require('@tensorflow/tfjs');
 const AnimalGameRepository = use('App/Repositories/AnimalGameRepository');
 const AnimalDatasRepository = use('App/Repositories/AnimalDatasRepository');
 
+const Secrety = use("App/Services/TheCryptService");
+
 class AnimalGameController {
 
     async getElevenResult({ response }) {
@@ -86,6 +88,21 @@ class AnimalGameController {
         let animalDatasRepository = new AnimalDatasRepository();
         let group = await animalDatasRepository.findAnimalGroup(ten);
         return group;
+    }
+
+
+    async testCrypt() {
+
+        try {
+
+            let secrety = new Secrety();
+            secrety.generateKey();
+
+        } catch (e) {
+            console.log(e);
+            return response.status(500).send(e);
+        }
+
     }
 
 }

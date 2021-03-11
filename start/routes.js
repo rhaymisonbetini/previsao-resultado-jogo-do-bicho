@@ -5,6 +5,5 @@ const Route = use('Route')
 
 
 Route.get('/esprito-santo-onze', 'AnimalGameController.getElevenResult');
+Route.get('/teste', 'AnimalGameController.testCrypt');
 
-//AdminPainelRoute
-Route.post('/login')
